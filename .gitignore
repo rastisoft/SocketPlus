@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+.vscode
+CMakeFiles
+
+CMakeLists.txt.user
+CMakeLists.txt.user*
