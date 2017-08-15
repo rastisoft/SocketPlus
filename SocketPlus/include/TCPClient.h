@@ -29,10 +29,7 @@ SOFTWARE.
 namespace RS::Network::SocketPlus
 {    
     class TCPClient : public TCPClientServerBase
-    {
-    protected:
-        
-        virtual void        connect(const sockaddr* address, socklen_t addressLength);
+    {       
     public:
                             TCPClient(SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
         virtual             ~TCPClient(void);
