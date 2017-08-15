@@ -36,18 +36,74 @@ namespace RS::Network::SocketPlus
     {
     }
 
+    i32 TCPClientServerBase::send(i32 socketFileDescriptor, const char* data, i32 length, i32 flags)
+    {
+        i32 totalSentSize = 0;
+        i32 sentSize = 0;
+        while(totalSentSize < length)
+        {
+            sentSize = ::send(socketFileDescriptor, data + sentSize, length - sentSize, flags);
+                            
+            if(sentSize < 0)
+                THROW_SOCKET_EXCEPTION("send() : ");
+                
+            totalSentSize += sentSize;
+        } 
+        
+        return totalSentSize;
+    }
+
+    i32 TCPClientServerBase::send(i32 socketFileDescriptor, const std::string& message, i32 flags)
+    {
+        return send(socketFileDescriptor, (message + '\0').c_str(), message.length() + 1, flags);
+    }
+
+    i32 TCPClientServerBase::receive(i32 socketFileDescriptor, char* buffer, i32 length, i32 flags)
+    {
+        i32 totalReceivedSize = 0;
+        i32 receiveSize = 0;
+        while(totalReceivedSize < length)
+        {
+            receiveSize = recv(socketFileDescriptor, buffer + receiveSize, length - receiveSize, flags);
+            
+            if(receiveSize == 0 || buffer[receiveSize - 1] == '\0')
+                return totalReceivedSize;
+            
+            if(receiveSize == -1)
+            {
+                if(errno != EINTR)
+                    THROW_SOCKET_EXCEPTION("receive() : ");
+                else
+                    continue;
+            }
+                
+            totalReceivedSize += receiveSize;
+        } 
+        
+        return totalReceivedSize;
+    }
+
+    i32 TCPClientServerBase::receive(i32 socketFileDescriptor, std::string& outString, i32 length)
+    {
+        char buffer[length];
+        memset(buffer, 0, sizeof(buffer));
+        const i32 receivedSize = receive(socketFileDescriptor, buffer, length);
+        outString = std::move(std::string(buffer));
+        return receivedSize;
+    }
+
     i32 TCPClientServerBase::send(const std::string& message)
     {
-        return SocketPlusBase::send(mTargetSocketFileDescriptor, message);
+        return send(mTargetSocketFileDescriptor, message);
     }
 
     i32  TCPClientServerBase::send(const char* data, i32 length)
     {
-        return SocketPlusBase::send(mTargetSocketFileDescriptor, data, length);
+        return send(mTargetSocketFileDescriptor, data, length);
     }
 
     i32 TCPClientServerBase::receive(std::string& outString, i32 length)
     {
-       return SocketPlusBase::receive(mTargetSocketFileDescriptor, outString, length);
+       return receive(mTargetSocketFileDescriptor, outString, length);
     }
 }

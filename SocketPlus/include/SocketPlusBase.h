@@ -58,41 +58,32 @@ namespace RS::Network::SocketPlus
     };
 
     /**
-    @description: This class provides main original socket functionalities.
+    @description: This a base class that provides main common functions which 
+    are needed by all derived classes.
     **/
 
     class SocketPlusBase
     {
     protected:
-        //i32                 mPortNumber;
+        
         SocketDomain        mDomain;
         SocketType          mType;
         i32                 mProtocol;
         i32                 mSocketFileDescriptor;
 
-    public:
-                            SocketPlusBase(SocketType type, SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
-        virtual             ~SocketPlusBase(void);
-
-        virtual void        connect(const sockaddr* address, socklen_t addressLength);
-        virtual void        bind(const sockaddr* address, socklen_t addressLength); 
-        virtual void        bind(ui32 portNumber);       
-        virtual void        listen(ui32 backlog);
-        virtual i32         accept(sockaddr* address, socklen_t* addressLength);
-        virtual i32         accept(void);
-        virtual i32         send(i32 socketFileDescriptor, const char* data, i32 length, i32 flags = 0);
-        virtual i32         send(i32 socketFileDescriptor, const std::string& message, i32 flags = 0);
-        virtual i32         receive(i32 socketFileDescriptor, char* buffer, i32 length, i32 flags = 0);
-        virtual i32         receive(i32 socketFileDescriptor, std::string& outString, i32 length = 256);
-
         virtual void        setSocketOption(i32 level, i32 optionName, const char* optionValue, socklen_t optionLength);
-        virtual void        close(void);
-
+        
         virtual void        getPeerName(i32 socketFileDescriptor, sockaddr* address, socklen_t* addressLength);
         virtual void        getAddressInfo(const char* node, const char* service, const addrinfo* hints, addrinfo** result);
         virtual std::string getPeerAddress(i32 socketFileDescriptor);
 
         virtual std::string netToPresentation(const sockaddr* address);
+        
+    public:
+                            SocketPlusBase(SocketType type, SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
+        virtual             ~SocketPlusBase(void);
+
+        virtual void        close(void);        
     };
 
     static RS_INLINE void checkForError(i32 resultCode, const std::string commandName, const std::string file, ui32 line)

@@ -31,10 +31,14 @@ namespace RS::Network::SocketPlus
     protected:
         i32                 mTargetSocketFileDescriptor;
 
+        virtual i32         send(i32 socketFileDescriptor, const char* data, i32 length, i32 flags = 0);
+        virtual i32         send(i32 socketFileDescriptor, const std::string& message, i32 flags = 0);
+        virtual i32         receive(i32 socketFileDescriptor, char* buffer, i32 length, i32 flags = 0);
+        virtual i32         receive(i32 socketFileDescriptor, std::string& outString, i32 length = 256);
     public:
                             TCPClientServerBase(SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
         virtual             ~TCPClientServerBase(void);
-
+        
         virtual i32         send(const std::string& message);
         virtual i32         send(const char* data, i32 length);
         virtual i32         receive(std::string& outString, i32 length = 256);

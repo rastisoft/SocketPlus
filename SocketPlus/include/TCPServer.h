@@ -35,9 +35,15 @@ namespace RS::Network::SocketPlus
         std::string                 mClientAddress;
     public:
                                     TCPServer(SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
-        virtual                     ~TCPServer(void);        
-        
+        virtual                     ~TCPServer(void);
+
+        virtual void                bind(const sockaddr* address, socklen_t addressLength); 
+        virtual void                bind(ui32 portNumber);       
+        virtual void                listen(ui32 backlog);
+        virtual i32                 accept(sockaddr* address, socklen_t* addressLength);
+        virtual i32                 accept(void);
         virtual void                start(i32 portNumber, i32 backLogSize);
+        
         virtual const std::string&  getClientAddress();
     };
 }

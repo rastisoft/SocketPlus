@@ -38,6 +38,11 @@ namespace RS::Network::SocketPlus
     {
     }
 
+    void TCPClient::connect(const sockaddr* address, socklen_t addressLength)
+    {
+        CHECK_FOR_ERROR(::connect(mSocketFileDescriptor, address, addressLength), "connect() : ");            
+    }
+
     void TCPClient::connectTo(const std::string& address, i32 portNumber)
     {
         try
