@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright (c) 2017 Davood Rasti & Alireza Rasti - Rastisoft
@@ -19,3 +20,23 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+#include "SocketPlusBase.h"
+
+namespace RS::Network::SocketPlus
+{
+    class TCPClientServerBase : protected SocketPlusBase
+    {
+    protected:
+        i32                 mTargetSocketFileDescriptor;
+
+    public:
+                            TCPClientServerBase(SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
+        virtual             ~TCPClientServerBase(void);
+
+        virtual i32         send(const std::string& message);
+        virtual i32         send(const char* data, i32 length);
+        virtual i32         receive(std::string& outString, i32 length = 256);
+    };
+}

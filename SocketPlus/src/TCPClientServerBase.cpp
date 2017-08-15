@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright (c) 2017 Davood Rasti & Alireza Rasti - Rastisoft
@@ -19,3 +20,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+#include "../include/TCPClientServerBase.h"
+
+namespace RS::Network::SocketPlus
+{
+    TCPClientServerBase::TCPClientServerBase(SocketDomain domain, i32 protocol) : 
+    SocketPlusBase(SocketType::STREAM, domain, protocol),
+        mTargetSocketFileDescriptor(-1)
+    {            
+    }
+
+    TCPClientServerBase::~TCPClientServerBase(void)
+    {
+    }
+
+    i32 TCPClientServerBase::send(const std::string& message)
+    {
+        return SocketPlusBase::send(mTargetSocketFileDescriptor, message);
+    }
+
+    i32  TCPClientServerBase::send(const char* data, i32 length)
+    {
+        return SocketPlusBase::send(mTargetSocketFileDescriptor, data, length);
+    }
+
+    i32 TCPClientServerBase::receive(std::string& outString, i32 length)
+    {
+       return SocketPlusBase::receive(mTargetSocketFileDescriptor, outString, length);
+    }
+}

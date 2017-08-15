@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright (c) 2017 Davood Rasti & Alireza Rasti - Rastisoft
@@ -19,3 +20,37 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+#pragma once
+
+#include "CommonTypes.h"
+#include <exception>
+
+namespace RS
+{
+    class Exception : public std::exception
+    {
+    protected:
+        std::string mMessage;
+        ulong       mLine;
+        std::string mFile;
+        std::string mModule;
+        std::string mFullMessage;
+        i32         mErrorCode;
+    public:
+                                    Exception(const std::string& message, int errorCode = 0, const std::string& file = "", i32 line = 0, const std::string& module = "");
+                                    ~Exception(void) throw();
+
+        virtual const std::string&  getFile();
+        virtual ulong               getLine();
+        virtual i32                 getErrorCode();
+        virtual const std::string&  getModule();
+        virtual const std::string&  getMessage();         
+        
+        const char*                 what() const throw();
+    };
+
+    //TODO: try inline function instead of macro.
+    #define THROW_EXCEPTION(message, errorCode) throw RS::Exception(message, errorCode, __FILE__, __LINE__)    
+}

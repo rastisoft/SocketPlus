@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright (c) 2017 Davood Rasti & Alireza Rasti - Rastisoft
@@ -19,3 +20,25 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+#pragma once
+
+#include <cstdint>
+#include <memory>
+
+namespace RS
+{
+    typedef std::int8_t			i8;
+    typedef std::uint8_t 		ui8;
+    typedef std::int16_t		i16;
+    typedef std::uint16_t 		ui16;
+    typedef std::int32_t		i32;
+    typedef std::uint32_t		ui32;
+    typedef unsigned long		ulong;
+    typedef std::int64_t		i64;
+    typedef std::uint64_t    	ui64;
+    typedef float				f32;
+
+    #define RS_INLINE           inline
+}

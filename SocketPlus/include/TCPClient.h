@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright (c) 2017 Davood Rasti & Alireza Rasti - Rastisoft
@@ -19,3 +20,21 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+#pragma once
+
+#include "TCPClientServerBase.h"
+
+namespace RS::Network::SocketPlus
+{    
+    class TCPClient : public TCPClientServerBase
+    {
+    protected:
+    public:
+                            TCPClient(SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
+        virtual             ~TCPClient(void);
+
+        virtual void        connectTo(const std::string& address, i32 portNumber, std::string service = "http");
+    };
+}
