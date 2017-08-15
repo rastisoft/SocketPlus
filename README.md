@@ -34,7 +34,7 @@ make
 The executable file will be built in the *examples/bin* folder.
 At the moment just one TCP example is available.
 
-### TCP:
+#### TCP:
 This example shows how the SocketPlus can be used to create a simple client/server application.
  
 First you need to run the server application and specify a port number (between 1024 - 65535).

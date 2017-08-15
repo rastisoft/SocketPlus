@@ -64,7 +64,7 @@ namespace RS::Network::SocketPlus
     class SocketPlusBase
     {
     protected:
-        i32                 mPortNumber;
+        //i32                 mPortNumber;
         SocketDomain        mDomain;
         SocketType          mType;
         i32                 mProtocol;
@@ -75,15 +75,18 @@ namespace RS::Network::SocketPlus
         virtual             ~SocketPlusBase(void);
 
         virtual void        connect(const sockaddr* address, socklen_t addressLength);
-        virtual void        bind(const sockaddr* address, socklen_t addressLength);
-        virtual void        listen(i32 backlog);
+        virtual void        bind(const sockaddr* address, socklen_t addressLength); 
+        virtual void        bind(ui32 portNumber);       
+        virtual void        listen(ui32 backlog);
         virtual i32         accept(sockaddr* address, socklen_t* addressLength);
+        virtual i32         accept(void);
         virtual i32         send(i32 socketFileDescriptor, const char* data, i32 length, i32 flags = 0);
         virtual i32         send(i32 socketFileDescriptor, const std::string& message, i32 flags = 0);
         virtual i32         receive(i32 socketFileDescriptor, char* buffer, i32 length, i32 flags = 0);
         virtual i32         receive(i32 socketFileDescriptor, std::string& outString, i32 length = 256);
 
         virtual void        setSocketOption(i32 level, i32 optionName, const char* optionValue, socklen_t optionLength);
+        virtual void        close(void);
 
         virtual void        getPeerName(i32 socketFileDescriptor, sockaddr* address, socklen_t* addressLength);
         virtual void        getAddressInfo(const char* node, const char* service, const addrinfo* hints, addrinfo** result);

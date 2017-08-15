@@ -40,8 +40,6 @@ namespace RS::Network::SocketPlus
 
     void TCPClient::connectTo(const std::string& address, i32 portNumber, std::string service)
     {
-        mPortNumber = portNumber;
-
         //Getting ip address from host name based on IP version.
         addrinfo hints;
         addrinfo* serverAddressInfo;      
@@ -56,12 +54,13 @@ namespace RS::Network::SocketPlus
         if(resultCode != 0)
             THROW_EXCEPTION("connectTo() : Host cannot be reached! " + std::string(gai_strerror(resultCode)), resultCode);
         
+        //Connects to the server based on the IP version.
         if(mDomain == SocketDomain::INET6)
         {
             sockaddr_in6 connectionAddressIP6;
             memset(reinterpret_cast<char *>(&connectionAddressIP6), 0, sizeof(connectionAddressIP6));
             connectionAddressIP6.sin6_family = AF_INET6;
-            connectionAddressIP6.sin6_port   = htons(mPortNumber);
+            connectionAddressIP6.sin6_port   = htons(portNumber);
             resultCode = ::connect(mSocketFileDescriptor, reinterpret_cast<struct sockaddr *>(&connectionAddressIP6), sizeof(connectionAddressIP6));
         }
         else
@@ -69,11 +68,11 @@ namespace RS::Network::SocketPlus
             sockaddr_in connectionAddress;
             memset(reinterpret_cast<char *>(&connectionAddress), 0, sizeof(connectionAddress));
             connectionAddress.sin_family = AF_INET;
-            connectionAddress.sin_port   = htons(mPortNumber);
+            connectionAddress.sin_port   = htons(portNumber);
             resultCode = ::connect(mSocketFileDescriptor, reinterpret_cast<struct sockaddr *>(&connectionAddress), sizeof(connectionAddress));
         }
 
         if(resultCode)
-            THROW_SOCKET_EXCEPTION("connectTo() : Could not connect to the host " + address + " via port "  + std::to_string(mPortNumber));
+            THROW_SOCKET_EXCEPTION("connectTo() : Could not connect to the host " + address + " via port "  + std::to_string(portNumber));
     }    
 }

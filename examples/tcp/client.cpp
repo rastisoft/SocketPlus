@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
     try
     {
         //Creates tcp client object with IPv4 address domain. (SocketDomain::INET6 for IPv6)
-        TCPClient client(SocketDomain::INET6);
+        TCPClient client(SocketDomain::INET);
     
         //Connects to the server.
         client.connectTo(serverAddress, portNumber);

@@ -39,51 +39,21 @@ namespace RS::Network::SocketPlus
 
     void TCPServer::start(i32 portNumber, i32 backLogSize)
     {
-        mPortNumber = portNumber;
-
         if(mDomain == SocketDomain::INET6)
         {
             constexpr i32 optionOn = 1;
             setSocketOption(IPPROTO_IPV6, IPV6_V6ONLY, (char*)&optionOn, sizeof(optionOn));
         }
 
-        if(mDomain == SocketDomain::INET6)
-        {
-            sockaddr_in6 serverAddressIP6;
-            memset(reinterpret_cast<char *>(&serverAddressIP6), 0, sizeof(serverAddressIP6));
-            serverAddressIP6.sin6_family      = AF_INET6;
-            serverAddressIP6.sin6_addr        = in6addr_any;
-            serverAddressIP6.sin6_port        = htons(mPortNumber);
-            bind(reinterpret_cast<struct sockaddr *>(&serverAddressIP6), sizeof(serverAddressIP6));
-        }
-        else
-        {
-            sockaddr_in serverAddress;
-            memset(reinterpret_cast<char *>(&serverAddress), 0, sizeof(serverAddress));
-            serverAddress.sin_family      = AF_INET;
-            serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-            serverAddress.sin_port        = htons(mPortNumber);
-            bind(reinterpret_cast<struct sockaddr *>(&serverAddress), sizeof(serverAddress));
-        }
+        bind(portNumber);                
         
         listen(backLogSize);
         
-        if(mDomain == SocketDomain::INET6)
-        {
-            sockaddr_in6 clientAddressIP6;
-            socklen_t clientLength = sizeof(clientAddressIP6);
-            mClientSocketFileDescriptor = accept(reinterpret_cast<struct sockaddr *>(&clientAddressIP6), &clientLength);
-        }
-        else
-        {
-            sockaddr_in clientAddress;
-            socklen_t clientLength = sizeof(clientAddress);
-            mClientSocketFileDescriptor = accept(reinterpret_cast<struct sockaddr *>(&clientAddress), &clientLength);
-        }
+        mClientSocketFileDescriptor = accept();
 
         mTargetSocketFileDescriptor = mClientSocketFileDescriptor;
         mClientAddress = getPeerAddress(mClientSocketFileDescriptor);        
-    }    
+    }
 
     const std::string& TCPServer::getClientAddress()
     {
