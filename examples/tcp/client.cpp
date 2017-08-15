@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
             std::cout << "\033[1;33m The server replied : \033[0m" << receivedString << "\n";
         }
     }
-    catch(Exception& exception)
+    catch(const Exception& exception)
     {
         std::cout << exception.what();
     }

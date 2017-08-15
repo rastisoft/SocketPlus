@@ -191,8 +191,7 @@ namespace RS::Network::SocketPlus
 
     void SocketPlusBase::getAddressInfo(const char* node, const char* service, const addrinfo* hints, addrinfo** result)
     {
-        const i32 errorCode = getaddrinfo(node, service, hints, result);
-        if (errorCode != 0)
+        if (const i32 errorCode = getaddrinfo(node, service, hints, result); errorCode != 0)
             THROW_EXCEPTION("getAddressInfo() : " + std::string(gai_strerror(errorCode)), errorCode);
     }
 

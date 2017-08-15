@@ -38,41 +38,35 @@ namespace RS::Network::SocketPlus
     {
     }
 
-    void TCPClient::connectTo(const std::string& address, i32 portNumber, std::string service)
+    void TCPClient::connectTo(const std::string& address, i32 portNumber)
     {
-        //Getting ip address from host name based on IP version.
-        addrinfo hints;
-        addrinfo* serverAddressInfo;      
-        
-        //Initializing hints address info.
-        memset(&hints, 0, sizeof hints);
-        hints.ai_family = (mDomain == SocketDomain::INET) ? AF_INET : AF_INET6;
-        hints.ai_socktype = SOCK_STREAM;
-
-        //Checks if host is reachable.
-        int resultCode = getaddrinfo(address.c_str(), service.c_str(), &hints, &serverAddressInfo);
-        if(resultCode != 0)
-            THROW_EXCEPTION("connectTo() : Host cannot be reached! " + std::string(gai_strerror(resultCode)), resultCode);
-        
-        //Connects to the server based on the IP version.
-        if(mDomain == SocketDomain::INET6)
+        try
         {
-            sockaddr_in6 connectionAddressIP6;
-            memset(reinterpret_cast<char *>(&connectionAddressIP6), 0, sizeof(connectionAddressIP6));
-            connectionAddressIP6.sin6_family = AF_INET6;
-            connectionAddressIP6.sin6_port   = htons(portNumber);
-            resultCode = ::connect(mSocketFileDescriptor, reinterpret_cast<struct sockaddr *>(&connectionAddressIP6), sizeof(connectionAddressIP6));
+            //Connects to the server based on the IP version.
+            if(mDomain == SocketDomain::INET6)
+            {
+                sockaddr_in6 connectionAddressIP6;
+                memset(reinterpret_cast<char *>(&connectionAddressIP6), 0, sizeof(connectionAddressIP6));
+                connectionAddressIP6.sin6_family = AF_INET6;
+                connectionAddressIP6.sin6_port   = htons(portNumber);
+                connect(reinterpret_cast<struct sockaddr *>(&connectionAddressIP6), sizeof(connectionAddressIP6));
+            }
+            else
+            {
+                sockaddr_in connectionAddress;
+                memset(reinterpret_cast<char *>(&connectionAddress), 0, sizeof(connectionAddress));
+                connectionAddress.sin_family = AF_INET;
+                connectionAddress.sin_port   = htons(portNumber);
+                connect(reinterpret_cast<struct sockaddr *>(&connectionAddress), sizeof(connectionAddress));
+            }
+        
         }
-        else
+        catch(Exception& exception)
         {
-            sockaddr_in connectionAddress;
-            memset(reinterpret_cast<char *>(&connectionAddress), 0, sizeof(connectionAddress));
-            connectionAddress.sin_family = AF_INET;
-            connectionAddress.sin_port   = htons(portNumber);
-            resultCode = ::connect(mSocketFileDescriptor, reinterpret_cast<struct sockaddr *>(&connectionAddress), sizeof(connectionAddress));
+            THROW_EXCEPTION("connectTo() : Could not connect to the host " + 
+                    address + " via port "  + 
+                    std::to_string(portNumber) +
+                    exception.what(), exception.getErrorCode());
         }
-
-        if(resultCode)
-            THROW_SOCKET_EXCEPTION("connectTo() : Could not connect to the host " + address + " via port "  + std::to_string(portNumber));
     }    
 }

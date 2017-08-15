@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
         std::cout << "\033[1;34m Good bye! \033[0m\n";
 
     }
-    catch(Exception& exception)
+    catch(const Exception& exception)
     {
         std::cerr << exception.what();
     }

@@ -35,6 +35,6 @@ namespace RS::Network::SocketPlus
                             TCPClient(SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
         virtual             ~TCPClient(void);
 
-        virtual void        connectTo(const std::string& address, i32 portNumber, std::string service = "http");
+        virtual void        connectTo(const std::string& address, i32 portNumber);
     };
 }
