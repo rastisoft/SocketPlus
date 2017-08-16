@@ -69,19 +69,16 @@ namespace RS::Network::SocketPlus
         SocketDomain        mDomain;
         SocketType          mType;
         i32                 mProtocol;
-        i32                 mSocketFileDescriptor;
-
-        virtual void        setSocketOption(i32 level, i32 optionName, const char* optionValue, socklen_t optionLength);
+        i32                 mSocketFileDescriptor;        
         
         virtual void        getPeerName(i32 socketFileDescriptor, sockaddr* address, socklen_t* addressLength);
-        virtual void        getAddressInfo(const char* node, const char* service, const addrinfo* hints, addrinfo** result);
+        virtual void        setSocketOption(i32 level, i32 optionName, const char* optionValue, socklen_t optionLength);
         virtual std::string getPeerAddress(i32 socketFileDescriptor);
-
         virtual std::string netToPresentation(const sockaddr* address);
         
     public:
                             SocketPlusBase(SocketType type, SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
-        virtual             ~SocketPlusBase(void);
+        virtual             ~SocketPlusBase(void);       
 
         virtual void        close(void);        
     };

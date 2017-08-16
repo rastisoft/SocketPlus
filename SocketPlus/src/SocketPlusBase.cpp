@@ -57,12 +57,6 @@ namespace RS::Network::SocketPlus
     void SocketPlusBase::getPeerName(i32 socketFileDescriptor, sockaddr* address, socklen_t* addressLength)
     {
         CHECK_FOR_ERROR(getpeername(socketFileDescriptor, address, addressLength), "getPeerName() : ");
-    }    
-
-    void SocketPlusBase::getAddressInfo(const char* node, const char* service, const addrinfo* hints, addrinfo** result)
-    {
-        if (const i32 errorCode = getaddrinfo(node, service, hints, result); errorCode != 0)
-            THROW_EXCEPTION("getAddressInfo() : " + std::string(gai_strerror(errorCode)), errorCode);
     }
 
     std::string SocketPlusBase::getPeerAddress(i32 socketFileDescriptor)

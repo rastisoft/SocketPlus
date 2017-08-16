@@ -1,13 +1,13 @@
 # **SocketPlus**
 |        |          |
 |---------|:---------:|
-|**Version:**  | 0.5.0 | 
+|**Version:**  | 0.7.0 | 
 |**Platform:** | Linux |
 |**Language:** | C++ 17 |
 |**License:**  | MIT |
 |**Status:**   | under development |
 
-**SocketPlus** provides a OOP framework for socket programming in C++.
+**SocketPlus** provides a simple OOP framework for socket programming in C++.
 
 For one of our courses at university, we had to implement a communication protocol using Unix Socket. Later, based on our experiences, we decided to create the SocketPlus that makes OOP socket programming in C++ easier.
 
