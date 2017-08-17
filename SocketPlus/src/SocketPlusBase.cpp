@@ -30,7 +30,8 @@ namespace RS::Network::SocketPlus
     SocketPlusBase::SocketPlusBase(SocketType type, SocketDomain domain, i32 protocol) : 
         mType(type),
         mDomain(domain),
-        mProtocol(protocol)
+        mProtocol(protocol),
+        mPortNumber(-1)
     {
         CHECK_FOR_ERROR((mSocketFileDescriptor = socket(static_cast<i32>(mDomain), static_cast<i32>(mType), mProtocol)), "socket() : ");
     }
@@ -100,5 +101,10 @@ namespace RS::Network::SocketPlus
             THROW_SOCKET_EXCEPTION("netToPresentation() :");
 
         return std::string(buffer);
+    }
+
+    i32 SocketPlusBase::getPortNumber(void)
+    {
+        return mPortNumber;
     }
 }

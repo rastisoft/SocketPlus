@@ -31,15 +31,31 @@ namespace RS::Network::SocketPlus
     class TCPServer : public TCPClientServerBase
     {
     protected:
-        i32                         mClientSocketFileDescriptor; //Keeps the socketFileDescriptor of the connected client.
+        i32                         mClientSocketFileDescriptor; //Keeps the socket file descriptor of the connected client.
         std::string                 mClientAddress; //Keeps the address of the connected client.
 
-        virtual void                bind(const sockaddr* address, socklen_t addressLength); 
-        virtual void                bind(ui32 portNumber);       
-        virtual void                listen(ui32 backlog);
-        virtual i32                 accept(sockaddr* address, socklen_t* addressLength);
+        /**
+            @description: Binds the socket to the specified port number.
+            @param portNumber : the port number that socket should bind to.
+            @return void.
+        **/
+        virtual void                bind(ui32 portNumber);   
+
+        /**
+            @description: Listen on the specified port number.
+            @param backLogSize: maximum number of waiting connections in the queue before 
+            to be accepted by the server(default = 64).
+            @return void.
+        **/
+        virtual void                listen(ui32 backlog = 64);
+
+         /**
+            @description: Accepts a proper connection request.
+            @return file descriptor of the client.
+        **/
         virtual i32                 accept(void);
     public:
+
         /**
             @description: TCPServer class constructor.
             @param domain : the communication domain which can be IPv4 or IPv6.

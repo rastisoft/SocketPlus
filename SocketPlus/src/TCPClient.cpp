@@ -39,7 +39,8 @@ namespace RS::Network::SocketPlus
 
     void TCPClient::connectTo(const std::string& address, i32 portNumber)
     {
-        //Getting ip address from host name based on IP version.
+        mPortNumber = portNumber;
+
         addrinfo hints;
         addrinfo* serverAddressInfo;      
         

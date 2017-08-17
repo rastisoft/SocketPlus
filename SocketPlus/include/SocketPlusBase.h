@@ -63,7 +63,8 @@ namespace RS::Network::SocketPlus
         SocketDomain        mDomain; //Stores the socket domain.
         SocketType          mType; //Stores the socket type.
         i32                 mProtocol; //Stores the socket protocol.
-        i32                 mSocketFileDescriptor; //Stores the socketFileDescriptor created by socket().
+        i32                 mSocketFileDescriptor; //Stores the socket file descriptor created by socket().
+        i32                 mPortNumber;
         
         virtual void        getPeerName(i32 socketFileDescriptor, sockaddr* address, socklen_t* addressLength);
         virtual void        setSocketOption(i32 level, i32 optionName, const char* optionValue, socklen_t optionLength);
@@ -77,7 +78,7 @@ namespace RS::Network::SocketPlus
 
         /**
             @description: Returns the peer connected address.
-            @param socketFileDescriptor: the socketFileDescriptor of the peer socket.
+            @param socketFileDescriptor: the file descriptor of the peer socket.
             @return: peer address.
         **/
         virtual std::string getPeerAddress(i32 socketFileDescriptor);
@@ -99,6 +100,8 @@ namespace RS::Network::SocketPlus
             @return void.
         **/
         virtual void        close(void);        
+
+        i32                 getPortNumber(void);
     };
 
     static RS_INLINE void checkForError(i32 resultCode, const std::string commandName, const std::string file, ui32 line)

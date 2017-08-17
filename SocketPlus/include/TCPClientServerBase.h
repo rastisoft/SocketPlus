@@ -37,7 +37,7 @@ namespace RS::Network::SocketPlus
 
         /**
             @description: Sends all data to the another socket.
-            @param socketFileDescriptor: socketFileDescriptor of receiver socket.
+            @param socketFileDescriptor: file descriptor of receiver socket.
             @param data: data that should be sent.
             @param length: length of the data.
             @param flags: specifies the behaviour of the function.(default = 0).
@@ -47,7 +47,7 @@ namespace RS::Network::SocketPlus
 
         /**
             @description: Sends entire string to the another socket.
-            @param socketFileDescriptor: socketFileDescriptor of receiver socket.
+            @param socketFileDescriptor: file descriptor of receiver socket.
             @param message: string that should be sent.
             @param flags: specifies the behaviour of the function.(default = 0).
             @return: number of sent byte.
@@ -56,7 +56,7 @@ namespace RS::Network::SocketPlus
 
         /**
             @description: receives data from the another socket.
-            @param socketFileDescriptor: socketFileDescriptor of the sender socket.
+            @param socketFileDescriptor: file descriptor of the sender socket.
             @param buffer: keeps received data.
             @param length: length of the received data.
             @param flags: specifies the behaviour of the function.(default = 0).

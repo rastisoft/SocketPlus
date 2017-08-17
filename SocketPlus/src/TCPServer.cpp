@@ -37,31 +37,37 @@ namespace RS::Network::SocketPlus
     {
     }    
 
-    void TCPServer::bind(const sockaddr* address, socklen_t addressLength)
-    {
-        CHECK_FOR_ERROR(::bind(mSocketFileDescriptor, address, addressLength), "bind() : ");
-    }
-
     void TCPServer::bind(ui32 portNumber)
     {
-        if(mDomain == SocketDomain::IPv6)
+        const auto result = [&]()
         {
-            sockaddr_in6 serverAddressIP6;
-            memset(reinterpret_cast<char *>(&serverAddressIP6), 0, sizeof(serverAddressIP6));
-            serverAddressIP6.sin6_family      = AF_INET6;
-            serverAddressIP6.sin6_addr        = in6addr_any;
-            serverAddressIP6.sin6_port        = htons(portNumber);
-            bind(reinterpret_cast<struct sockaddr *>(&serverAddressIP6), sizeof(serverAddressIP6));
-        }
-        else
-        {
-            sockaddr_in serverAddress;
-            memset(reinterpret_cast<char *>(&serverAddress), 0, sizeof(serverAddress));
-            serverAddress.sin_family      = AF_INET;
-            serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-            serverAddress.sin_port        = htons(portNumber);
-            bind(reinterpret_cast<struct sockaddr *>(&serverAddress), sizeof(serverAddress));
-        }
+            switch(mDomain)
+            {
+                case SocketDomain::IPv6:
+                {
+                    sockaddr_in6 serverAddressIP6;
+                    memset(reinterpret_cast<char *>(&serverAddressIP6), 0, sizeof(serverAddressIP6));
+                    serverAddressIP6.sin6_family      = AF_INET6;
+                    serverAddressIP6.sin6_addr        = in6addr_any;
+                    serverAddressIP6.sin6_port        = htons(portNumber);
+                    return ::bind(mSocketFileDescriptor, reinterpret_cast<struct sockaddr *>(&serverAddressIP6), sizeof(serverAddressIP6));
+                }
+                case SocketDomain::IPv4:
+                {
+                    sockaddr_in serverAddress;
+                    memset(reinterpret_cast<char *>(&serverAddress), 0, sizeof(serverAddress));
+                    serverAddress.sin_family      = AF_INET;
+                    serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+                    serverAddress.sin_port        = htons(portNumber);
+                    return ::bind(mSocketFileDescriptor, reinterpret_cast<struct sockaddr *>(&serverAddress), sizeof(serverAddress));
+                }
+                default:
+                    THROW_EXCEPTION("bind() : Only IPv4 and IPv6 are supported.", -1);
+            }
+        }();
+        
+        if(result < 0)
+            THROW_SOCKET_EXCEPTION("bind() :");
     }
 
     void TCPServer::listen(ui32 backlog)
@@ -69,15 +75,7 @@ namespace RS::Network::SocketPlus
         CHECK_FOR_ERROR(::listen(mSocketFileDescriptor, backlog), "listen() : ");
     }
 
-    i32 TCPServer::accept(sockaddr* address, socklen_t* addressLength)
-    {
-        const auto result = ::accept(mSocketFileDescriptor, address, addressLength);
-        CHECK_FOR_ERROR(result, "accept() : ");
-        
-        return result;
-    }
-
-    i32  TCPServer::accept(void)
+    i32 TCPServer::accept(void)
     {
         const auto result = [&]()
         {
@@ -108,13 +106,15 @@ namespace RS::Network::SocketPlus
 
     void TCPServer::start(i32 portNumber, i32 backLogSize)
     {
+        mPortNumber = portNumber;
+
         constexpr i32 optionOn = 1;
         if(mDomain == SocketDomain::IPv6)
             setSocketOption(IPPROTO_IPV6, IPV6_V6ONLY, (char*)(&optionOn), sizeof(optionOn));
 
         setSocketOption(SOL_SOCKET, SO_REUSEADDR, (char*)(&optionOn), sizeof(optionOn));
 
-        bind(portNumber);        
+        bind(mPortNumber);        
         listen(backLogSize);
         
         mClientSocketFileDescriptor = accept();
