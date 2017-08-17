@@ -15,7 +15,7 @@ We are working on this project in our spare time and add more features to it gra
 
 
 
-## Required Tools and OS:
+## Required:
  * C++ 17 compiler.
  * CMake 3.0 or above.
  * Linux operating system.
