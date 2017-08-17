@@ -31,7 +31,6 @@ namespace RS::Network::SocketPlus
     TCPClient::TCPClient(SocketDomain domain, i32 protocol) : 
         TCPClientServerBase(domain, protocol)
     {
-        mTargetSocketFileDescriptor = mSocketFileDescriptor;        
     }
 
     TCPClient::~TCPClient(void)
@@ -74,5 +73,20 @@ namespace RS::Network::SocketPlus
 
         if(resultCode)
             THROW_SOCKET_EXCEPTION("connectTo() : Could not connect to the host " + address + " via port "  + std::to_string(portNumber));
-    }    
+    }
+
+    i32 TCPClient::send(const std::string& message, i32 flags)
+    {
+        return TCPClientServerBase::send(mSocketFileDescriptor, message, flags);
+    }
+
+    i32  TCPClient::send(const char* data, i32 length, i32 flags)
+    {
+        return TCPClientServerBase::send(mSocketFileDescriptor, data, length, flags);
+    }
+
+    i32 TCPClient::receive(std::string& outString, i32 length, i32 flags)
+    {
+       return TCPClientServerBase::receive(mSocketFileDescriptor, outString, length, flags);
+    }
 }

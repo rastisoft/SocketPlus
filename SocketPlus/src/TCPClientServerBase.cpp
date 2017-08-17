@@ -27,8 +27,7 @@ SOFTWARE.
 namespace RS::Network::SocketPlus
 {
     TCPClientServerBase::TCPClientServerBase(SocketDomain domain, i32 protocol) : 
-    SocketPlusBase(SocketType::Stream, domain, protocol),
-        mTargetSocketFileDescriptor(-1)
+    SocketPlusBase(SocketType::Stream, domain, protocol)
     {            
     }
 
@@ -88,22 +87,7 @@ namespace RS::Network::SocketPlus
         char buffer[length];
         memset(buffer, 0, sizeof(buffer));
         const i32 receivedSize = receive(socketFileDescriptor, buffer, length, flags);
-        outString = std::move(std::string(buffer));
+        outString.assign(buffer);
         return receivedSize;
-    }
-
-    i32 TCPClientServerBase::send(const std::string& message, i32 flags)
-    {
-        return send(mTargetSocketFileDescriptor, message, flags);
-    }
-
-    i32  TCPClientServerBase::send(const char* data, i32 length, i32 flags)
-    {
-        return send(mTargetSocketFileDescriptor, data, length, flags);
-    }
-
-    i32 TCPClientServerBase::receive(std::string& outString, i32 length, i32 flags)
-    {
-       return receive(mTargetSocketFileDescriptor, outString, length, flags);
-    }
+    }    
 }

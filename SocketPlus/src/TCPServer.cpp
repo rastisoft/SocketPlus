@@ -96,7 +96,7 @@ namespace RS::Network::SocketPlus
                     return ::accept(mSocketFileDescriptor, reinterpret_cast<sockaddr *>(&clientAddress), &clientLength);
                 }
                 default:
-                    THROW_EXCEPTION("accept() : Only INET and INET6 are supported.", -1);
+                    THROW_EXCEPTION("accept() : Only IPv4 and IPv6 are supported.", -1);
             };
         }();
 
@@ -119,11 +119,25 @@ namespace RS::Network::SocketPlus
         
         mClientSocketFileDescriptor = accept();
 
-        mTargetSocketFileDescriptor = mClientSocketFileDescriptor;
         mClientAddress = getPeerAddress(mClientSocketFileDescriptor);        
     }
 
-    const std::string& TCPServer::getClientAddress()
+    i32 TCPServer::send(const std::string& message, i32 flags)
+    {
+        return TCPClientServerBase::send(mClientSocketFileDescriptor, message, flags);
+    }
+
+    i32  TCPServer::send(const char* data, i32 length, i32 flags)
+    {
+        return TCPClientServerBase::send(mClientSocketFileDescriptor, data, length, flags);
+    }
+
+    i32 TCPServer::receive(std::string& outString, i32 length, i32 flags)
+    {
+       return TCPClientServerBase::receive(mClientSocketFileDescriptor, outString, length, flags);
+    }
+
+    const std::string& TCPServer::getClientAddress(void)
     {
         return mClientAddress;
     }

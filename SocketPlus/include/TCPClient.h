@@ -31,9 +31,47 @@ namespace RS::Network::SocketPlus
     class TCPClient : public TCPClientServerBase
     {       
     public:
+
+        /**
+            @description: TCPClient class constructor.
+            @param domain : the communication domain which can be IPv4 or IPv6.
+            @param protocol : the socket protocol. (will be removed in future updates.)
+            @return
+        **/
                             TCPClient(SocketDomain domain = SocketDomain::IPv4, i32 protocol = 0);
         virtual             ~TCPClient(void);
         
+        /**
+            @description: Connects to a server.
+            @param address : the address of the server.
+            @param portNumber : the port number that socket should use.
+            @return
+        **/
         virtual void        connectTo(const std::string& address, i32 portNumber);
+
+         /**
+            @description: Sends entire string to the connected server.
+            @param flags: specifies the behaviour of the function.(default = 0).
+            @return: number of sent byte.
+        **/
+        virtual i32         send(const std::string& message, i32 flags = 0);
+
+         /**
+            @description: Sends all data to the connected server.
+            @param data: data that should be sent.
+            @param length: length of the data.
+            @param flags: specifies the behaviour of the function.(default = 0).
+            @return: number of sent byte.
+        **/
+        virtual i32         send(const char* data, i32 length, i32 flags = 0);
+
+        /**
+            @description: receives string from the connected server.
+            @param outString: keeps received string.
+            @param length: length of the received data.(default = 256)
+            @param flags: specifies the behaviour of the function.(default = 0).
+            @return: number of received byte.
+        **/
+        virtual i32         receive(std::string& outString, i32 length = 256, i32 flags = 0);
     };
 }

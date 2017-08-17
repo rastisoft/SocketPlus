@@ -32,7 +32,7 @@ namespace RS::Network::SocketPlus
         mDomain(domain),
         mProtocol(protocol)
     {
-        CHECK_FOR_ERROR((mSocketFileDescriptor = socket(int(mDomain), int(mType), mProtocol)), "socket() : ");
+        CHECK_FOR_ERROR((mSocketFileDescriptor = socket(static_cast<i32>(mDomain), static_cast<i32>(mType), mProtocol)), "socket() : ");
     }
 
     SocketPlusBase::~SocketPlusBase(void)

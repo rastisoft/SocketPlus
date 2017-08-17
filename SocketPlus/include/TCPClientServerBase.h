@@ -26,21 +26,61 @@ SOFTWARE.
 
 namespace RS::Network::SocketPlus
 {
+    /**
+    @description: This class provides main common functions which 
+    are needed by TCP classes.
+    **/
+
     class TCPClientServerBase : public SocketPlusBase
     {
     protected:
-        i32                 mTargetSocketFileDescriptor;
 
+        /**
+            @description: Sends all data to the another socket.
+            @param socketFileDescriptor: socketFileDescriptor of receiver socket.
+            @param data: data that should be sent.
+            @param length: length of the data.
+            @param flags: specifies the behaviour of the function.(default = 0).
+            @return: number of sent byte.
+        **/
         virtual i32         send(i32 socketFileDescriptor, const char* data, i32 length, i32 flags = 0);
+
+        /**
+            @description: Sends entire string to the another socket.
+            @param socketFileDescriptor: socketFileDescriptor of receiver socket.
+            @param message: string that should be sent.
+            @param flags: specifies the behaviour of the function.(default = 0).
+            @return: number of sent byte.
+        **/
         virtual i32         send(i32 socketFileDescriptor, const std::string& message, i32 flags = 0);
+
+        /**
+            @description: receives data from the another socket.
+            @param socketFileDescriptor: socketFileDescriptor of the sender socket.
+            @param buffer: keeps received data.
+            @param length: length of the received data.
+            @param flags: specifies the behaviour of the function.(default = 0).
+            @return: number of received byte.
+        **/
         virtual i32         receive(i32 socketFileDescriptor, char* buffer, i32 length, i32 flags = 0);
+
+        /**
+            @description: receives string from the another socket.
+            @param socketFileDescriptor: socketFileDescriptor of the sender socket.
+            @param outString: keeps received string.
+            @param length: length of the received data.(default = 255)
+            @param flags: specifies the behaviour of the function.(default = 0).
+            @return: number of received byte.
+        **/
         virtual i32         receive(i32 socketFileDescriptor, std::string& outString, i32 length = 256, i32 flags = 0);
     public:
+         /**
+            @description: TCPClientServerBase class constructor.
+            @param domain : the communication domain which can be IPv4 or IPv6.
+            @param protocol : the socket protocol. (will be removed in the future updates.)
+            @return
+        **/
                             TCPClientServerBase(SocketDomain domain = SocketDomain::IPv4, i32 protocol = 0);
-        virtual             ~TCPClientServerBase(void);
-        
-        virtual i32         send(const std::string& message, i32 flags = 0);
-        virtual i32         send(const char* data, i32 length, i32 flags = 0);
-        virtual i32         receive(std::string& outString, i32 length = 256, i32 flags = 0);
+        virtual             ~TCPClientServerBase(void);        
     };
 }

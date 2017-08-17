@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
         std::cout << "\033[1;34m I am waitting for a connection on port: \033[0m" << portNumber << std::endl;
 
         //Starts the server with specified port number. 
-        server.start(portNumber, 5);
+        server.start(portNumber);
         
         std::cout << "\033[1;34m A client with address \033[0m" << server.getClientAddress() << "\033[1;34m has been connected to me.\033[0m\n";
         
