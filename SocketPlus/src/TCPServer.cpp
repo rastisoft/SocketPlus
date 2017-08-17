@@ -44,7 +44,7 @@ namespace RS::Network::SocketPlus
 
     void TCPServer::bind(ui32 portNumber)
     {
-        if(mDomain == SocketDomain::INET6)
+        if(mDomain == SocketDomain::IPv6)
         {
             sockaddr_in6 serverAddressIP6;
             memset(reinterpret_cast<char *>(&serverAddressIP6), 0, sizeof(serverAddressIP6));
@@ -71,7 +71,7 @@ namespace RS::Network::SocketPlus
 
     i32 TCPServer::accept(sockaddr* address, socklen_t* addressLength)
     {
-        const int result = ::accept(mSocketFileDescriptor, address, addressLength);
+        const auto result = ::accept(mSocketFileDescriptor, address, addressLength);
         CHECK_FOR_ERROR(result, "accept() : ");
         
         return result;
@@ -79,21 +79,21 @@ namespace RS::Network::SocketPlus
 
     i32  TCPServer::accept(void)
     {
-        const i32 result = [&]()
+        const auto result = [&]()
         {
             switch(mDomain)
             {
-                case SocketDomain::INET6:
+                case SocketDomain::IPv6:
                 {
                     sockaddr_in6 clientAddressIP6;
                     socklen_t clientLength = sizeof(clientAddressIP6);
-                    return ::accept(mSocketFileDescriptor, reinterpret_cast<struct sockaddr *>(&clientAddressIP6), &clientLength);
+                    return ::accept(mSocketFileDescriptor, reinterpret_cast<sockaddr *>(&clientAddressIP6), &clientLength);
                 }
-                case SocketDomain::INET:
+                case SocketDomain::IPv4:
                 {
                     sockaddr_in clientAddress;
                     socklen_t clientLength = sizeof(clientAddress);
-                    return ::accept(mSocketFileDescriptor, reinterpret_cast<struct sockaddr *>(&clientAddress), &clientLength);
+                    return ::accept(mSocketFileDescriptor, reinterpret_cast<sockaddr *>(&clientAddress), &clientLength);
                 }
                 default:
                     THROW_EXCEPTION("accept() : Only INET and INET6 are supported.", -1);
@@ -108,14 +108,13 @@ namespace RS::Network::SocketPlus
 
     void TCPServer::start(i32 portNumber, i32 backLogSize)
     {
-        if(mDomain == SocketDomain::INET6)
-        {
-            constexpr i32 optionOn = 1;
-            setSocketOption(IPPROTO_IPV6, IPV6_V6ONLY, (char*)&optionOn, sizeof(optionOn));
-        }
+        constexpr i32 optionOn = 1;
+        if(mDomain == SocketDomain::IPv6)
+            setSocketOption(IPPROTO_IPV6, IPV6_V6ONLY, (char*)(&optionOn), sizeof(optionOn));
 
-        bind(portNumber);                
-        
+        setSocketOption(SOL_SOCKET, SO_REUSEADDR, (char*)(&optionOn), sizeof(optionOn));
+
+        bind(portNumber);        
         listen(backLogSize);
         
         mClientSocketFileDescriptor = accept();

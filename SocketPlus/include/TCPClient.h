@@ -31,7 +31,7 @@ namespace RS::Network::SocketPlus
     class TCPClient : public TCPClientServerBase
     {       
     public:
-                            TCPClient(SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
+                            TCPClient(SocketDomain domain = SocketDomain::IPv4, i32 protocol = 0);
         virtual             ~TCPClient(void);
         
         virtual void        connectTo(const std::string& address, i32 portNumber);

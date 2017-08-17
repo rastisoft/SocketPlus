@@ -34,7 +34,7 @@ namespace RS::Network::SocketPlus
         i32                         mClientSocketFileDescriptor;
         std::string                 mClientAddress;
     public:
-                                    TCPServer(SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
+                                    TCPServer(SocketDomain domain = SocketDomain::IPv4, i32 protocol = 0);
         virtual                     ~TCPServer(void);
 
         virtual void                bind(const sockaddr* address, socklen_t addressLength); 

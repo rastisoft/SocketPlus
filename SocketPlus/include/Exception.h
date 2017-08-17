@@ -39,8 +39,8 @@ namespace RS
         std::string mFullMessage;
         i32         mErrorCode;
     public:
-                                    Exception(const std::string& message, int errorCode = 0, const std::string& file = "", i32 line = 0, const std::string& module = "");
-                                    ~Exception(void) throw();
+                                    Exception(const std::string& message = "", int errorCode = 0, const std::string& file = "", i32 line = 0, const std::string& module = "");                         
+        virtual                     ~Exception(void) throw();
 
         virtual const std::string&  getFile();
         virtual ulong               getLine();

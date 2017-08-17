@@ -27,7 +27,7 @@ SOFTWARE.
 namespace RS::Network::SocketPlus
 {
     TCPClientServerBase::TCPClientServerBase(SocketDomain domain, i32 protocol) : 
-    SocketPlusBase(SocketType::STREAM, domain, protocol),
+    SocketPlusBase(SocketType::Stream, domain, protocol),
         mTargetSocketFileDescriptor(-1)
     {            
     }

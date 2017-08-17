@@ -26,7 +26,7 @@ SOFTWARE.
 
 namespace RS::Network::SocketPlus
 {
-    class TCPClientServerBase : protected SocketPlusBase
+    class TCPClientServerBase : public SocketPlusBase
     {
     protected:
         i32                 mTargetSocketFileDescriptor;
@@ -36,7 +36,7 @@ namespace RS::Network::SocketPlus
         virtual i32         receive(i32 socketFileDescriptor, char* buffer, i32 length, i32 flags = 0);
         virtual i32         receive(i32 socketFileDescriptor, std::string& outString, i32 length = 256, i32 flags = 0);
     public:
-                            TCPClientServerBase(SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
+                            TCPClientServerBase(SocketDomain domain = SocketDomain::IPv4, i32 protocol = 0);
         virtual             ~TCPClientServerBase(void);
         
         virtual i32         send(const std::string& message, i32 flags = 0);

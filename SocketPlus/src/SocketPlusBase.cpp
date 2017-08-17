@@ -61,19 +61,19 @@ namespace RS::Network::SocketPlus
 
     std::string SocketPlusBase::getPeerAddress(i32 socketFileDescriptor)
     {
-        if(mDomain == SocketDomain::INET6)
+        if(mDomain == SocketDomain::IPv6)
         {
-            struct sockaddr_in6 addressIP6;
+            sockaddr_in6 addressIP6;
             socklen_t addressLength = sizeof(addressIP6);
-            getPeerName(socketFileDescriptor, reinterpret_cast<struct sockaddr *>(&addressIP6), &addressLength);
-            return netToPresentation(reinterpret_cast<struct sockaddr *>(&addressIP6));
+            getPeerName(socketFileDescriptor, reinterpret_cast<sockaddr *>(&addressIP6), &addressLength);
+            return netToPresentation(reinterpret_cast<sockaddr *>(&addressIP6));
         }
         else
         {
-            struct sockaddr_in address;
+            sockaddr_in address;
             socklen_t addressLength = sizeof(address);
-            getPeerName(socketFileDescriptor, reinterpret_cast<struct sockaddr *>(&address), &addressLength);
-            return netToPresentation(reinterpret_cast<struct sockaddr *>(&address));
+            getPeerName(socketFileDescriptor, reinterpret_cast<sockaddr *>(&address), &addressLength);
+            return netToPresentation(reinterpret_cast<sockaddr *>(&address));
         }
     }
 
@@ -88,9 +88,9 @@ namespace RS::Network::SocketPlus
             switch(address->sa_family)
             {
                 case AF_INET6:
-                    return inet_ntop(AF_INET6, &(reinterpret_cast<const struct sockaddr_in6*>(address)->sin6_addr), buffer, bufferSize);
+                    return inet_ntop(AF_INET6, &(reinterpret_cast<const sockaddr_in6*>(address)->sin6_addr), buffer, bufferSize);
                 case AF_INET:
-                    return inet_ntop(AF_INET, &(reinterpret_cast<const struct sockaddr_in*>(address)->sin_addr), buffer, bufferSize);
+                    return inet_ntop(AF_INET, &(reinterpret_cast<const sockaddr_in*>(address)->sin_addr), buffer, bufferSize);
                 default:
                     THROW_EXCEPTION("netToPresentation() : Only INET and INET6 are supported.", -1);
             };

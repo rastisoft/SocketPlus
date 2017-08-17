@@ -41,20 +41,14 @@ namespace RS::Network::SocketPlus
 {   
     enum class SocketDomain
     {
-        INET = AF_INET,
-        INET6 = AF_INET6
+        IPv4 = AF_INET,
+        IPv6 = AF_INET6
     };
 
     enum class SocketType
     {
-        STREAM = SOCK_STREAM,
-        DGRAM = SOCK_DGRAM,
-        SEQPACKET = SOCK_SEQPACKET,
-        RAW = SOCK_RAW,
-        RDM = SOCK_RDM,
-        PACKET = SOCK_PACKET,
-        NONBLOCK = SOCK_NONBLOCK,
-        CLOEXEC = SOCK_CLOEXEC
+        Stream = SOCK_STREAM,
+        Datagram = SOCK_DGRAM
     };
 
     /**
@@ -66,20 +60,44 @@ namespace RS::Network::SocketPlus
     {
     protected:
         
-        SocketDomain        mDomain;
-        SocketType          mType;
-        i32                 mProtocol;
-        i32                 mSocketFileDescriptor;        
+        SocketDomain        mDomain; //Stores the socket domain.
+        SocketType          mType; //Stores the socket type.
+        i32                 mProtocol; //Stores the socket protocol.
+        i32                 mSocketFileDescriptor; //Stores the socketFileDescriptor created by socket().
         
         virtual void        getPeerName(i32 socketFileDescriptor, sockaddr* address, socklen_t* addressLength);
         virtual void        setSocketOption(i32 level, i32 optionName, const char* optionValue, socklen_t optionLength);
-        virtual std::string getPeerAddress(i32 socketFileDescriptor);
-        virtual std::string netToPresentation(const sockaddr* address);
         
+        /**
+            @description: Converts an network address to readable format.
+            @param address: network address.
+            @return: address in readable form.
+        **/
+        virtual std::string netToPresentation(const sockaddr* address);
+
+        /**
+            @description: Returns the peer connected address.
+            @param socketFileDescriptor: the socketFileDescriptor of the peer socket.
+            @return: peer address.
+        **/
+        virtual std::string getPeerAddress(i32 socketFileDescriptor);
+
     public:
-                            SocketPlusBase(SocketType type, SocketDomain domain = SocketDomain::INET, i32 protocol = 0);
+        /**
+            @description: SocketPlusBase class constructor.
+            @param type: the type of the socket which can be SocketType::Stream (for connection-based) or 
+                         SocketType::Stream (for connectionless).
+            @param domain : the communication domain which can be IPv4 or IPv6.
+            @param protocol : the socket protocol. (will be removed in the future updates.)
+            @return
+        **/
+                            SocketPlusBase(SocketType type = SocketType::Stream, SocketDomain domain = SocketDomain::IPv4, i32 protocol = 0);
         virtual             ~SocketPlusBase(void);       
 
+         /**
+            @description: Closes the socket.
+            @return void.
+        **/
         virtual void        close(void);        
     };
 

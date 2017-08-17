@@ -49,12 +49,12 @@ int main(int argc, char* argv[])
         printErrorAndUsage();
     
     //Gets port number.
-    const ui32 portNumber = [&]()
+    const auto portNumber = [&]()
     {
         if(isNumber(argv[1]))
             return std::stoi(argv[1]);
 
-        printErrorAndUsage("Port number shoud be a number!");
+        printErrorAndUsage("Port number should be a number!");
     }();
 
     //Checks if port number is in the required range.
@@ -77,8 +77,8 @@ int main(int argc, char* argv[])
 
     try
     {
-        //Creates tcp server object with IPv4 address domain. (SocketDomain::INET6 for IPv6)
-        TCPServer server(SocketDomain::INET);
+        //Creates tcp server object with IPv4 address domain. (SocketDomain::IPv6 for IPv6)
+        TCPServer server(SocketDomain::IPv4);
 
         std::cout << "\033[1;34m I am waitting for a connection on port: \033[0m" << portNumber << std::endl;
 
@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
             if(receivedString == "bye")
                 break;
           
-            std::cout << "\033[1;34m The client(\033[0m" << server.getClientAddress() << "\033[1;34m) said : \033[0m" << receivedString << "\n";
+            std::cout << "\033[1;34m The client said : \033[0m" << receivedString << "\n";
             
             //Sends a random text to the client.
             server.send(meaninglessAnswers[uniformDistribution(randomEngine)]);

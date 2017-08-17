@@ -31,7 +31,7 @@ namespace RS::Network::SocketPlus
     TCPClient::TCPClient(SocketDomain domain, i32 protocol) : 
         TCPClientServerBase(domain, protocol)
     {
-        mTargetSocketFileDescriptor = mSocketFileDescriptor;
+        mTargetSocketFileDescriptor = mSocketFileDescriptor;        
     }
 
     TCPClient::~TCPClient(void)
@@ -46,16 +46,16 @@ namespace RS::Network::SocketPlus
         
         //Initializing hints address info.
         memset(&hints, 0, sizeof hints);
-        hints.ai_family = static_cast<i32>(SocketDomain::INET);
+        hints.ai_family = static_cast<i32>(SocketDomain::IPv4);
         hints.ai_socktype = SOCK_STREAM;
 
         //Checks if host is reachable.
-        int resultCode = getaddrinfo(address.c_str(), NULL, &hints, &serverAddressInfo);
+        auto resultCode = getaddrinfo(address.c_str(), NULL, &hints, &serverAddressInfo);
         if(resultCode != 0)
             THROW_EXCEPTION("connectTo() : Host cannot be reached! " + std::string(gai_strerror(resultCode)), resultCode);
         
         //Connects to the server based on the IP version.
-        if(mDomain == SocketDomain::INET6)
+        if(mDomain == SocketDomain::IPv6)
         {
             sockaddr_in6 connectionAddressIP6;
             memset(reinterpret_cast<char *>(&connectionAddressIP6), 0, sizeof(connectionAddressIP6));
