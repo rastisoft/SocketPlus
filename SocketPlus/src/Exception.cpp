@@ -53,7 +53,7 @@ namespace RS
 
     const std::string& Exception::getModule()
     {
-
+        return mModule;
     }
 
     const std::string& Exception::getMessage()

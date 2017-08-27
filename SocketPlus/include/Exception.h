@@ -32,6 +32,7 @@ namespace RS
     class Exception : public std::exception
     {
     protected:
+        
         std::string mMessage;
         ulong       mLine;
         std::string mFile;
