@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include "../include/TCPClientServerBase.h"
+#include <cstring>
 
 namespace RS::Network::SocketPlus
 {
@@ -37,8 +38,8 @@ namespace RS::Network::SocketPlus
 
     i32 TCPClientServerBase::send(i32 socketFileDescriptor, const char* data, i32 length, i32 flags)
     {
-        i32 totalSentSize = 0;
-        i32 sentSize = 0;
+        i32 totalSentSize{0};
+        i32 sentSize{0};
         while(totalSentSize < length)
         {
             sentSize = ::send(socketFileDescriptor, data + sentSize, length - sentSize, flags);
@@ -59,8 +60,8 @@ namespace RS::Network::SocketPlus
 
     i32 TCPClientServerBase::receive(i32 socketFileDescriptor, char* buffer, i32 length, i32 flags)
     {
-        i32 totalReceivedSize = 0;
-        i32 receiveSize = 0;
+        i32 totalReceivedSize{0};
+        i32 receiveSize{0};
         while(totalReceivedSize < length)
         {
             receiveSize = recv(socketFileDescriptor, buffer + receiveSize, length - receiveSize, flags);
@@ -84,9 +85,8 @@ namespace RS::Network::SocketPlus
 
     i32 TCPClientServerBase::receive(i32 socketFileDescriptor, std::string& outString, i32 length, i32 flags)
     {
-        char buffer[length];
-        memset(buffer, 0, sizeof(buffer));
-        const i32 receivedSize = receive(socketFileDescriptor, buffer, length, flags);
+        char buffer[length] = {};
+        const i32 receivedSize{receive(socketFileDescriptor, buffer, length, flags)};
         outString.assign(buffer);
         return receivedSize;
     }    

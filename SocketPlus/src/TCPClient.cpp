@@ -41,11 +41,11 @@ namespace RS::Network::SocketPlus
     {
         mPortNumber = portNumber;
 
-        addrinfo hints;
+        addrinfo hints{};
         addrinfo* serverAddressInfo;      
         
         //Initializing hints address info.
-        memset(&hints, 0, sizeof hints);
+        // std::memset(&hints, 0, sizeof hints);
         hints.ai_family = static_cast<i32>(SocketDomain::IPv4);
         hints.ai_socktype = SOCK_STREAM;
 
@@ -57,16 +57,16 @@ namespace RS::Network::SocketPlus
         //Connects to the server based on the IP version.
         if(mDomain == SocketDomain::IPv6)
         {
-            sockaddr_in6 connectionAddressIP6;
-            memset(reinterpret_cast<char *>(&connectionAddressIP6), 0, sizeof(connectionAddressIP6));
+            sockaddr_in6 connectionAddressIP6{};
+            // std::memset(reinterpret_cast<char *>(&connectionAddressIP6), 0, sizeof(connectionAddressIP6));
             connectionAddressIP6.sin6_family = AF_INET6;
             connectionAddressIP6.sin6_port   = htons(portNumber);
             resultCode = ::connect(mSocketFileDescriptor, reinterpret_cast<struct sockaddr *>(&connectionAddressIP6), sizeof(connectionAddressIP6));
         }
         else
         {
-            sockaddr_in connectionAddress;
-            memset(reinterpret_cast<char *>(&connectionAddress), 0, sizeof(connectionAddress));
+            sockaddr_in connectionAddress{};
+            // std::memset(reinterpret_cast<char *>(&connectionAddress), 0, sizeof(connectionAddress));
             connectionAddress.sin_family = AF_INET;
             connectionAddress.sin_port   = htons(portNumber);
             resultCode = ::connect(mSocketFileDescriptor, reinterpret_cast<struct sockaddr *>(&connectionAddress), sizeof(connectionAddress));

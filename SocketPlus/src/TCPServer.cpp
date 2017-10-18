@@ -45,8 +45,8 @@ namespace RS::Network::SocketPlus
             {
                 case SocketDomain::IPv6:
                 {
-                    sockaddr_in6 serverAddressIP6;
-                    memset(reinterpret_cast<char *>(&serverAddressIP6), 0, sizeof(serverAddressIP6));
+                    sockaddr_in6 serverAddressIP6{};
+                    // memset(reinterpret_cast<char *>(&serverAddressIP6), 0, sizeof(serverAddressIP6));
                     serverAddressIP6.sin6_family      = AF_INET6;
                     serverAddressIP6.sin6_addr        = in6addr_any;
                     serverAddressIP6.sin6_port        = htons(portNumber);
@@ -54,8 +54,8 @@ namespace RS::Network::SocketPlus
                 }
                 case SocketDomain::IPv4:
                 {
-                    sockaddr_in serverAddress;
-                    memset(reinterpret_cast<char *>(&serverAddress), 0, sizeof(serverAddress));
+                    sockaddr_in serverAddress{};
+                    // memset(reinterpret_cast<char *>(&serverAddress), 0, sizeof(serverAddress));
                     serverAddress.sin_family      = AF_INET;
                     serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
                     serverAddress.sin_port        = htons(portNumber);
@@ -108,7 +108,7 @@ namespace RS::Network::SocketPlus
     {
         mPortNumber = portNumber;
 
-        constexpr i32 optionOn = 1;
+        constexpr i32 optionOn{1};
         if(mDomain == SocketDomain::IPv6)
             setSocketOption(IPPROTO_IPV6, IPV6_V6ONLY, (char*)(&optionOn), sizeof(optionOn));
 
